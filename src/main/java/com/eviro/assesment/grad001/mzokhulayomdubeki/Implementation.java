@@ -2,8 +2,6 @@ package com.eviro.assesment.grad001.mzokhulayomdubeki;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
-import jakarta.persistence.EntityManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -19,9 +17,6 @@ import java.util.UUID;
 public class Implementation implements FileParser {
     // Constants
     private static final String IMAGE_DIRECTORY = "images/";
-
-    @Autowired
-    private EntityManager entityManager; // Inject EntityManager
 
 
     @Override
@@ -42,7 +37,8 @@ public class Implementation implements FileParser {
             }
 
             return imageFile;
-        } catch (IllegalArgumentException e){
+        }
+        catch (IllegalArgumentException e){
             // Handle the IllegalArgumentException
             e.printStackTrace();
             // You can throw a custom exception, return null, or handle the error in any appropriate way
@@ -70,19 +66,29 @@ public class Implementation implements FileParser {
         }
     }
     @Override
-    public void parseAndSaveCSV(File csvFile) {
+    public void parseAndSaveCSV(File csvFile2) {
 
         try{
+//            CSVReader reader = new CSVReader(new FileReader(csvFile));
+//            read file from within program
+            File csvFile = new File("1672815113084-GraduateDev_AssessmentCsv_Ref003.csv");
             CSVReader reader = new CSVReader(new FileReader(csvFile));
             String[] nextLine;
 
             while ((nextLine = reader.readNext()) != null) {
                 String name = nextLine[0];
                 String surname = nextLine[1];
-                String base64ImageData = nextLine[2];
+                String imageFormat = nextLine[2];
+                String base64ImageData = nextLine[3];
+
+//                System.out.println(name);
+//                System.out.println(surname);
+                System.out.println(name);
 
                 File imageFile = convertCSVDataToImage(base64ImageData);
+                System.out.println(base64ImageData);
                 URI imageLink = createImageLink(imageFile);
+                System.out.println("image link= "+imageLink);
 
                 AccountProfile accountProfile = new AccountProfile();
                 accountProfile.setName(name);
@@ -92,7 +98,7 @@ public class Implementation implements FileParser {
                 // Save the accountProfile object to the database
                 // Assuming you are using JPA, you can inject an instance of EntityManager or JpaRepository to persist the object.
                 // For example: entityManager.persist(accountProfile);
-                entityManager.persist(accountProfile);
+//                entityManager.persist(accountProfile);
         }
             reader.close();
 

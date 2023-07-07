@@ -8,6 +8,6 @@ public interface FileParser {
     File convertCSVDataToImage(String base64ImageData);
     URI createImageLink(File fileImage);
 
-    void parseAndSaveCSV(File csvFile);
+    void parseAndSaveCSV(File csvFile2);
 
 }

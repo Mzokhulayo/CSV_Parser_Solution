@@ -1,12 +1,15 @@
 package com.eviro.assesment.grad001.mzokhulayomdubeki;
 
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URI;
 
 @RestController
@@ -19,23 +22,37 @@ public class ImageController {
     }
 
     @PostMapping("/parse-and-save-csv")
-    public ResponseEntity<String> parseAndSaveCSV(@RequestParam("csvFilePath") String csvFilePath) {
-        File csvFile = new File(csvFilePath);
+    public ResponseEntity<String> parseAndSaveCSV() {
+        // read file from within the program
+
+        File csvFile = new File("1672815113084-GraduateDev_AssessmentCsv_Ref003.csv");
         fileParser.parseAndSaveCSV(csvFile);
         return ResponseEntity.ok("CSV parsing initiated.");
     }
 
-    @PostMapping("/convert-image")
-    public ResponseEntity<URI> convertCSVDataToImage(@RequestBody String base64ImageData) {
+    @GetMapping("/convert-image")
+    public ResponseEntity<Resource> convertCSVDataToImage(@RequestParam String base64ImageData) {
         File imageFile = fileParser.convertCSVDataToImage(base64ImageData);
 
         if (imageFile != null) {
-            URI imageLink = fileParser.createImageLink(imageFile);
-            return ResponseEntity.ok(imageLink);
+            // Create a Resource object from the image file
+            Resource resource = new FileSystemResource(imageFile);
+
+            // Return the file as a ResponseEntity with appropriate headers
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG) // Set the appropriate content type
+                    .contentLength(imageFile.length()) // Set the content length
+                    .body(resource); // Set the resource as the response body
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+//            URI imageLink = fileParser.createImageLink(imageFile);
+//            return ResponseEntity.ok(imageLink);
+//        } else {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//        }
+//    }
 
     @GetMapping("/{name}/{surname}/{filename:.+}")
     public FileSystemResource getHttpImageLink(
@@ -48,6 +65,7 @@ public class ImageController {
 
             // Check if the file exists
             File imageFile = new File(filePath);
+            System.out.println(imageFile);
             if (imageFile.exists()) {
                 // Return the FileSystemResource pointing to the file
                 return new FileSystemResource(imageFile);

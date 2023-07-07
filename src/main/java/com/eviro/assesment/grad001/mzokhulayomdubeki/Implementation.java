@@ -10,13 +10,22 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import java.util.UUID;
 
 @Component
 public class Implementation implements FileParser {
     // Constants
     private static final String IMAGE_DIRECTORY = "images/";
+    public static List<AccountProfile> accountProfiles = new ArrayList<>();
+
+
+
+//    public Implementation() {
+//        this.entityManager = entityManager;
+//    }
 
 
     @Override
@@ -65,12 +74,15 @@ public class Implementation implements FileParser {
             return null;
         }
     }
+//    @Transactional
     @Override
-    public void parseAndSaveCSV(File csvFile2) {
+    public List<AccountProfile> parseAndSaveCSV(File csvFile2, List<AccountProfile> accountProfiles) {
+
 
         try{
 //            CSVReader reader = new CSVReader(new FileReader(csvFile));
 //            read file from within program
+
             File csvFile = new File("1672815113084-GraduateDev_AssessmentCsv_Ref003.csv");
             CSVReader reader = new CSVReader(new FileReader(csvFile));
             String[] nextLine;
@@ -88,12 +100,15 @@ public class Implementation implements FileParser {
                 File imageFile = convertCSVDataToImage(base64ImageData);
                 System.out.println(base64ImageData);
                 URI imageLink = createImageLink(imageFile);
-                System.out.println("image link= "+imageLink);
+//                *System.out.println("image link= "+imageLink);
 
                 AccountProfile accountProfile = new AccountProfile();
                 accountProfile.setName(name);
                 accountProfile.setSurname(surname);
+                accountProfile.setBase64ImageData(base64ImageData);
                 accountProfile.setHttpImageLink(imageLink.toString());
+
+                accountProfiles.add(accountProfile);
 
                 // Save the accountProfile object to the database
                 // Assuming you are using JPA, you can inject an instance of EntityManager or JpaRepository to persist the object.
@@ -105,6 +120,7 @@ public class Implementation implements FileParser {
     } catch (IOException | CsvValidationException e) {
             e.printStackTrace();
         }
+        return accountProfiles;
     }
     private String generateUniqueFileName() {
         // Generate a unique file name for the image file

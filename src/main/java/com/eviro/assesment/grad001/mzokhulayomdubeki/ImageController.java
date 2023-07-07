@@ -1,5 +1,6 @@
 package com.eviro.assesment.grad001.mzokhulayomdubeki;
 
+import jakarta.persistence.EntityManager;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -21,38 +22,45 @@ public class ImageController {
         this.fileParser = fileParser;
     }
 
-    @PostMapping("/parse-and-save-csv")
+//    public ImageController() {
+//        this.fileParser = new Implementation();
+//    }
+
+
+
+
+    @GetMapping("/parse-and-save-csv")
     public ResponseEntity<String> parseAndSaveCSV() {
         // read file from within the program
 
         File csvFile = new File("1672815113084-GraduateDev_AssessmentCsv_Ref003.csv");
-        fileParser.parseAndSaveCSV(csvFile);
-        return ResponseEntity.ok("CSV parsing initiated.");
+        System.out.println(Implementation.accountProfiles);
+        fileParser.parseAndSaveCSV(csvFile,Implementation.accountProfiles);
+        System.out.println(Implementation.accountProfiles);
+
+        return ResponseEntity.ok("CSV parsing initiated, Working on file");
     }
 
     @GetMapping("/convert-image")
-    public ResponseEntity<Resource> convertCSVDataToImage(@RequestParam String base64ImageData) {
+    public ResponseEntity<URI> convertCSVDataToImage(@RequestParam String base64ImageData) {
+
+        for (AccountProfile accountProfile : Implementation.accountProfiles) {
+            String ImageData = accountProfile.getBase64ImageData();
+            base64ImageData = ImageData;
+        }
+
+        System.out.println(base64ImageData);
         File imageFile = fileParser.convertCSVDataToImage(base64ImageData);
 
         if (imageFile != null) {
-            // Create a Resource object from the image file
-            Resource resource = new FileSystemResource(imageFile);
+            URI imageLink = fileParser.createImageLink(imageFile);
+            System.out.println("base64ImageData has been converted to a httpLink");
+            return ResponseEntity.ok(imageLink);
 
-            // Return the file as a ResponseEntity with appropriate headers
-            return ResponseEntity.ok()
-                    .contentType(MediaType.IMAGE_JPEG) // Set the appropriate content type
-                    .contentLength(imageFile.length()) // Set the content length
-                    .body(resource); // Set the resource as the response body
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-//            URI imageLink = fileParser.createImageLink(imageFile);
-//            return ResponseEntity.ok(imageLink);
-//        } else {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-//        }
-//    }
 
     @GetMapping("/{name}/{surname}/{filename:.+}")
     public FileSystemResource getHttpImageLink(

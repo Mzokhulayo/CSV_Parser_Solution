@@ -2,7 +2,13 @@ package com.eviro.assesment.grad001.mzokhulayomdubeki;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.EntityManager;
+import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,6 +26,9 @@ public class Implementation implements FileParser {
     // Constants
     private static final String IMAGE_DIRECTORY = "images/";
     public static List<AccountProfile> accountProfiles = new ArrayList<>();
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
 
 
@@ -74,7 +83,7 @@ public class Implementation implements FileParser {
             return null;
         }
     }
-//    @Transactional
+    @Transactional
     @Override
     public List<AccountProfile> parseAndSaveCSV(File csvFile2, List<AccountProfile> accountProfiles) {
 
@@ -105,14 +114,14 @@ public class Implementation implements FileParser {
                 AccountProfile accountProfile = new AccountProfile();
                 accountProfile.setName(name);
                 accountProfile.setSurname(surname);
-                accountProfile.setBase64ImageData(base64ImageData);
+//                accountProfile.setBase64ImageData(base64ImageData);
                 accountProfile.setHttpImageLink(imageLink.toString());
 
                 accountProfiles.add(accountProfile);
 
                 // Save the accountProfile object to the database
                 // Assuming you are using JPA, you can inject an instance of EntityManager or JpaRepository to persist the object.
-                // For example: entityManager.persist(accountProfile);
+                 entityManager.persist(accountProfile);
 //                entityManager.persist(accountProfile);
         }
             reader.close();

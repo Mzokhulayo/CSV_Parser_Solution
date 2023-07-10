@@ -6,6 +6,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
@@ -88,4 +89,13 @@ public class ImageController {
             return null; // Return an appropriate response based on your error handling strategy
         }
     }
+
+        @GetMapping("/h2-console")
+        public String h2Console() {
+            // Handle the request and return the appropriate response
+            // ...
+//            return "h2-console"; // or the name of the HTML template
+        return "redirect:/h2-console/login.do";
+    }
+
 }

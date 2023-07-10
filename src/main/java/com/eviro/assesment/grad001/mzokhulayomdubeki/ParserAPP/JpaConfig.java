@@ -1,4 +1,4 @@
-package com.eviro.assesment.grad001.mzokhulayomdubeki;
+package com.eviro.assesment.grad001.mzokhulayomdubeki.ParserAPP;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

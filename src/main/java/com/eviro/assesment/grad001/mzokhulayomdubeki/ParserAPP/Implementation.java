@@ -1,4 +1,4 @@
-package com.eviro.assesment.grad001.mzokhulayomdubeki;
+package com.eviro.assesment.grad001.mzokhulayomdubeki.ParserAPP;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
@@ -6,8 +6,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.EntityManager;
-import org.springframework.stereotype.Component;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 
 import java.io.File;
@@ -20,21 +19,23 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
-
+@Service
 @Component
 public class Implementation implements FileParser {
     // Constants
     private static final String IMAGE_DIRECTORY = "images/";
     public static List<AccountProfile> accountProfiles = new ArrayList<>();
 
+    private final AccountProfileRepository repository;
+
     @PersistenceContext
     private EntityManager entityManager;
 
 
 
-//    public Implementation() {
-//        this.entityManager = entityManager;
-//    }
+    public Implementation(AccountProfileRepository repository) {
+        this.repository = repository;
+    }
 
 
     @Override

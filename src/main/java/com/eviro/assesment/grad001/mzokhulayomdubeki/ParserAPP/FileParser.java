@@ -1,4 +1,4 @@
-package com.eviro.assesment.grad001.mzokhulayomdubeki;
+package com.eviro.assesment.grad001.mzokhulayomdubeki.ParserAPP;
 
 import java.io.File;
 import java.net.URI;

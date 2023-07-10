@@ -1,30 +1,21 @@
-package com.eviro.assesment.grad001.mzokhulayomdubeki;
+package com.eviro.assesment.grad001.mzokhulayomdubeki.ParserAPP;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "account_profiles")
-public class AccountProfile {
+public class DatabaseHandler {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
     private String name;
     private String surname;
     private String httpImageLink;
-
-    private String base64ImageData;
-
-    public String getBase64ImageData() {
-        return base64ImageData;
-    }
-
-    public void setBase64ImageData(String base64ImageData) {
-        this.base64ImageData = base64ImageData;
-    }
 
     public Long getId() {
         return id;
@@ -57,5 +48,4 @@ public class AccountProfile {
     public void setHttpImageLink(String httpImageLink) {
         this.httpImageLink = httpImageLink;
     }
-
 }

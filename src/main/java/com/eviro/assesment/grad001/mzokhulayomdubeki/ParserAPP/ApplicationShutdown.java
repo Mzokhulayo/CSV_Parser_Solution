@@ -20,10 +20,8 @@ public class ApplicationShutdown {
     @PreDestroy
     public void onShutdown() {
         try {
-            // Delete the contents of the images folder
             FileUtils.cleanDirectory(new File(imagesFolderPath));
         } catch (IOException e) {
-            // Handle any exception that occurs during the deletion process
             e.printStackTrace();
         }
     }

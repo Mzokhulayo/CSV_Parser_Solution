@@ -16,7 +16,9 @@ public class AccountProfile {
     private String name;
     private String surname;
     private String httpImageLink;
+    @Transient
     private String base64ImageData;
+
 
     /**
      * Get the base64-encoded image data.

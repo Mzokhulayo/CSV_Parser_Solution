@@ -24,7 +24,6 @@ import java.util.UUID;
 @Service
 @Component
 public class Implementation implements FileParser {
-    // Constants
     private static final String IMAGE_DIRECTORY = "images/";
     public static List<AccountProfile> accountProfiles = new ArrayList<>();
 
@@ -131,7 +130,6 @@ public class Implementation implements FileParser {
                 accountProfile.setName(name);
                 accountProfile.setSurname(surname);
                 accountProfile.setHttpImageLink(imageLink.toString());
-
                 accountProfiles.add(accountProfile);
 
                 // Save the accountProfile object to the database

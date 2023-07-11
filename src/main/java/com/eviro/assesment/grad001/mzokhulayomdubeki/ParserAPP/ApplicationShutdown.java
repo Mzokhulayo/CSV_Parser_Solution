@@ -6,11 +6,17 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Component that performs cleanup operations on application shutdown.
+ */
 @Component
 public class ApplicationShutdown {
 
-    private final String imagesFolderPath = "path/to/images/folder";
+    private final String imagesFolderPath = "/images";
 
+    /**
+     * Performs cleanup operations when the application is shutting down.
+     */
     @PreDestroy
     public void onShutdown() {
         try {

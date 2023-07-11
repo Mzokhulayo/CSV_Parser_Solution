@@ -13,6 +13,9 @@ import java.io.FileNotFoundException;
 import java.net.URI;
 import java.net.URLEncoder;
 
+/**
+ * Controller class for handling image-related operations.
+ */
 @RestController
 @RequestMapping("/v1/api/image")
 public class ImageController {
@@ -22,13 +25,11 @@ public class ImageController {
         this.fileParser = fileParser;
     }
 
-//    public ImageController() {
-//        this.fileParser = new Implementation();
-//    }
-
-
-
-
+    /**
+     * Endpoint for parsing and saving CSV data.
+     *
+     * @return ResponseEntity indicating the status of CSV parsing.
+     */
     @GetMapping("/parse-and-save-csv")
     public ResponseEntity<String> parseAndSaveCSV() {
         // read file from within the program
@@ -41,6 +42,12 @@ public class ImageController {
         return ResponseEntity.ok("CSV parsing initiated, Working on file");
     }
 
+    /**
+     * Endpoint for converting CSV data to an image.
+     *
+     * @param base64ImageData The base64-encoded image data.
+     * @return ResponseEntity containing the converted image link.
+     */
     @GetMapping("/convert-image")
     public ResponseEntity<URI> convertCSVDataToImage(@RequestParam String base64ImageData) {
 
@@ -61,6 +68,15 @@ public class ImageController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    /**
+     * Endpoint for retrieving the HTTP image link for a specific name, surname, and filename.
+     *
+     * @param name     The name parameter in the URL path.
+     * @param surname  The surname parameter in the URL path.
+     * @param filename The filename parameter in the URL path.
+     * @return ResponseEntity containing the HTTP image link if found, or a 404 response if not found.
+     */
     @GetMapping("/name/surname/{filename:.+}")
     public ResponseEntity<Resource> getHttpImageLink(
             @PathVariable String name,
@@ -115,38 +131,15 @@ public class ImageController {
         }
     }
 
-//    @GetMapping("/{name}/{surname}/{filename:.+}")
-//    public FileSystemResource getHttpImageLink(
-//            @PathVariable String name,
-//            @PathVariable String surname,
-//            @PathVariable String filename) {
-//        try {
-//            // Construct the file path based on the provided name, surname, and filename
-//            String filePath = "images/" + name + "_" + surname + "/" + filename;
-//
-//            // Check if the file exists
-//            File imageFile = new File(filePath);
-//            System.out.println(imageFile);
-//            if (imageFile.exists()) {
-//                // Return the FileSystemResource pointing to the file
-//                return new FileSystemResource(imageFile);
-//            } else {
-//                // If the file does not exist, return a 404 Not Found response
-//                throw new FileNotFoundException();
-//            }
-//        } catch (Exception e) {
-//            // Handle any exception that occurs (e.g., FileNotFoundException)
-//            // You can customize the error handling based on your requirements
-//            e.printStackTrace();
-//            return null; // Return an appropriate response based on your error handling strategy
-//        }
-
-
-
-        @GetMapping("/h2-console")
-        public String h2Console() {
-            // Handle the request and return the appropriate response
-            // ...
+    /**
+     * Endpoint for accessing the H2 database console.
+     *
+     * @return The redirect URL for accessing the H2 database console login page.
+     */
+    @GetMapping("/h2-console")
+    public String h2Console() {
+        // Handle the request and return the appropriate response
+        // ...
 //            return "h2-console"; // or the name of the HTML template
         return "redirect:/h2-console/login.do";
     }

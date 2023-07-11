@@ -49,7 +49,7 @@ public class ImageController {
      * @return ResponseEntity containing the converted image link.
      */
     @GetMapping("/convert-image")
-    public ResponseEntity<URI> convertCSVDataToImage(@RequestParam String base64ImageData) {
+    public ResponseEntity<URI> convertCSVDataToImage(@RequestParam String base64ImageData,@RequestParam String imageFormat) {
 
         for (AccountProfile accountProfile : Implementation.accountProfiles) {
             String ImageData = accountProfile.getBase64ImageData();
@@ -57,7 +57,7 @@ public class ImageController {
         }
 
         System.out.println(base64ImageData);
-        File imageFile = fileParser.convertCSVDataToImage(base64ImageData);
+        File imageFile = fileParser.convertCSVDataToImage(base64ImageData,imageFormat);
 
         if (imageFile != null) {
             URI imageLink = fileParser.createImageLink(imageFile);

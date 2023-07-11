@@ -22,7 +22,7 @@ Notes:
 The httpImageLink must be a link exposed via a rest endpoint, which will give you
 access to the physical image file that was converted from the flat file.
 
-**_See Full_Description.pdf on the root folder._**
+**_ee Full_Description.pdf on the root folder._**
 
 ## ----------------------------------------------------------------------------------------
 

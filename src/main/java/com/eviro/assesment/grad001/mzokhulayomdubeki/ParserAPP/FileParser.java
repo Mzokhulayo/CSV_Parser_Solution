@@ -15,7 +15,7 @@ public interface FileParser {
      * @param base64ImageData The base64-encoded image data.
      * @return The image file generated from the data.
      */
-    File convertCSVDataToImage(String base64ImageData);
+    File convertCSVDataToImage(String base64ImageData,String imageFormat);
 
     /**
      * Creates an image link for the given image file.

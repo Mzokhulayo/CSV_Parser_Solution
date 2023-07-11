@@ -46,7 +46,7 @@ public class Implementation implements FileParser {
      * @throws RuntimeException If an invalid base64 image data is provided.
      */
     @Override
-    public File convertCSVDataToImage(String base64ImageData) {
+    public File convertCSVDataToImage(String base64ImageData, String imageFormat) {
         try {
             // Decode base64 image data
             byte[] imageBytes = Base64.getDecoder().decode(base64ImageData);
@@ -54,8 +54,12 @@ public class Implementation implements FileParser {
             // Generate a unique file name
             String fileName = generateUniqueFileName();
 
-            // Create a new file with the generated file name
-            File imageFile = new File(IMAGE_DIRECTORY + fileName);
+            // Extract the file extension from the image format
+
+            String fileExtension = extractFileExtension(imageFormat);
+
+            // Create a new file with the generated file name and extension
+            File imageFile = new File(IMAGE_DIRECTORY + fileName + "." + fileExtension);
 
             // Write the image data to the file
             try (FileOutputStream fos = new FileOutputStream(imageFile)) {
@@ -115,10 +119,17 @@ public class Implementation implements FileParser {
             while ((nextLine = reader.readNext()) != null) {
                 String name = nextLine[0];
                 String surname = nextLine[1];
-                String imageFormat = nextLine[2];
+//                String imageFormat = nextLine[2];
+                String imageFormat = "jpg"; // Default image format
+
+                if (nextLine[2].contains("jpeg")) {
+                    imageFormat = "jpg";
+                }else if (nextLine[2].contains("png")) {
+                    imageFormat = "png";
+                }
                 String base64ImageData = nextLine[3];
 
-                File imageFile = convertCSVDataToImage(base64ImageData);
+                File imageFile = convertCSVDataToImage(base64ImageData,imageFormat);
                 URI imageLink = createImageLink(imageFile);
 
                 AccountProfile accountProfile = new AccountProfile();
@@ -147,6 +158,22 @@ public class Implementation implements FileParser {
         // Generate a unique file name for the image file
         // You can implement your own logic here, such as using a UUID
         String uniqueFileName = UUID.randomUUID().toString();
-        return uniqueFileName + ".jpg";
+        return uniqueFileName;
+    }
+
+    /**
+     * Extracts the file extension from the image format.
+     *
+     * @param imageFormat The image format.
+     * @return The extracted file extension.
+     */
+    private String extractFileExtension(String imageFormat) {
+        // Remove leading dot if present
+        imageFormat = imageFormat.startsWith(".") ? imageFormat.substring(1) : imageFormat;
+
+        // Convert image format to lowercase
+        imageFormat = imageFormat.toLowerCase();
+
+        return imageFormat;
     }
 }

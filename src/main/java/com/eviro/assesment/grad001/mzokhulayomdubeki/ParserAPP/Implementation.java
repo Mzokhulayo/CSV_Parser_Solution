@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Service;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -110,26 +109,22 @@ public class Implementation implements FileParser {
     @Transactional
     @Override
     public List<AccountProfile> parseAndSaveCSV(File csvFile2, List<AccountProfile> accountProfiles) {
-        try {
-            // Read file from within the program
-            File csvFile = new File("1672815113084-GraduateDev_AssessmentCsv_Ref003.csv");
-            CSVReader reader = new CSVReader(new FileReader(csvFile));
+        try (CSVReader reader = new CSVReader(new FileReader(csvFile2))) {
             String[] nextLine;
 
             while ((nextLine = reader.readNext()) != null) {
                 String name = nextLine[0];
                 String surname = nextLine[1];
-//                String imageFormat = nextLine[2];
                 String imageFormat = "jpg"; // Default image format
 
                 if (nextLine[2].contains("jpeg")) {
                     imageFormat = "jpg";
-                }else if (nextLine[2].contains("png")) {
+                } else if (nextLine[2].contains("png")) {
                     imageFormat = "png";
                 }
                 String base64ImageData = nextLine[3];
 
-                File imageFile = convertCSVDataToImage(base64ImageData,imageFormat);
+                File imageFile = convertCSVDataToImage(base64ImageData, imageFormat);
                 URI imageLink = createImageLink(imageFile);
 
                 AccountProfile accountProfile = new AccountProfile();
@@ -142,12 +137,12 @@ public class Implementation implements FileParser {
                 // Save the accountProfile object to the database
                 entityManager.persist(accountProfile);
             }
-            reader.close();
         } catch (IOException | CsvValidationException e) {
             e.printStackTrace();
         }
         return accountProfiles;
     }
+
 
     /**
      * Generates a unique file name for the image file.
